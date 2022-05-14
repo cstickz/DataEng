@@ -20,7 +20,6 @@ def transform_acs(filename):
     df1['PerCapitaIncome'] = (df1['weighted_inc'] / df1['Population']).round(2)
     del df1['weighted_inc']
 
-    #print(df1.head(20))
     return df1
 
 def transform_covid(filename):
@@ -45,14 +44,9 @@ def integrate(county_info, COVID_monthly):
     df = pd.concat([county_info, COVID_monthly], axis=1, join='outer')
     df = df.loc[:, ~df.columns.duplicated()]
 
-    #df1 = df.groupby(['ID', 'County', 'State', 'Population', 'Poverty', 'PerCapitaIncome']).agg({'Cases':sum, 'Deaths':sum}).reset_index()
-
     df['TotalCasesPer100K'] = (df['Cases'] / (df['Population'] / 100000)).round(2)
     df['TotalDeathsPer100K'] = (df['Deaths'] / (df['Population'] / 100000)).round(2)
     
-    #res = df[df['County'] == 'Harlan County']
-    #print(res.head(50))
-
     return df
 
 county_info = transform_acs("acs2017_census_tract_data.csv")
@@ -62,25 +56,23 @@ COVID_summary = integrate(county_info, COVID_monthly)
 # Calculate Pearson correlation coefficient R for pairs of columns.
 # Ex: R = df['TotalCasesPer100K'].corr(df['Poverty'])
 
-# TODO: Compute the correlation coefficient for the following relationships for all Oregon counties
+# Compute the correlation coefficient for the following relationships for all Oregon counties:
+
+oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
 
 # COVID total cases vs. % population in poverty
-oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
 R = oregon_df['Cases'].corr(oregon_df['Poverty'])
 #print(R)
 
 # COVID total deaths vs. % population in poverty
-oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
 R = oregon_df['Deaths'].corr(oregon_df['Poverty'])
 #print(R)
 
 # COVID total cases vs. Per Capita Income level
-oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
 R = oregon_df['Cases'].corr(oregon_df['PerCapitaIncome'])
 #print(R)
 
 # COVID total deaths vs. Per Capita Income level
-oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
 R = oregon_df['Deaths'].corr(oregon_df['PerCapitaIncome'])
 #print(R)
 
