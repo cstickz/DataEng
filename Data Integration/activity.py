@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-import datetime as dt
 
 def transform_acs(filename):
     # One row per county
