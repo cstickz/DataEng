@@ -36,8 +36,6 @@ def transform_covid(filename):
 
     df1.columns = ['County', 'State', 'Month', 'Year', 'Cases', 'Deaths']
 
-    res = df1[df1['County'] == 'Malheur']
-    print(res)
     return df1
 
 def integrate(county_info, COVID_monthly):
@@ -67,14 +65,24 @@ COVID_summary = integrate(county_info, COVID_monthly)
 # TODO: Compute the correlation coefficient for the following relationships for all Oregon counties
 
 # COVID total cases vs. % population in poverty
+oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
+R = oregon_df['Cases'].corr(oregon_df['Poverty'])
+#print(R)
 
-#R = COVID_summary['Cases'].corr(COVID_summary['Poverty'])
 # COVID total deaths vs. % population in poverty
-#R = COVID_summary['Deaths'].corr(COVID_summary['Poverty'])
+oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
+R = oregon_df['Deaths'].corr(oregon_df['Poverty'])
+#print(R)
+
 # COVID total cases vs. Per Capita Income level
-#R = COVID_summary['Cases'].corr(COVID_summary['PerCapitaIncome'])
+oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
+R = oregon_df['Cases'].corr(oregon_df['PerCapitaIncome'])
+#print(R)
+
 # COVID total deaths vs. Per Capita Income level
-#R = COVID_summary['Deaths'].corr(COVID_summary['PerCapitaIncome'])
+oregon_df = COVID_summary.where(COVID_summary['State'] == 'Oregon') 
+R = oregon_df['Deaths'].corr(oregon_df['PerCapitaIncome'])
+#print(R)
 
 
 # Across all of the counties in the entire USA:
